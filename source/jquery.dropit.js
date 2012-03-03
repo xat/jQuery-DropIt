@@ -1,7 +1,6 @@
  /*
  * dropIt - jQuery Plugin
  * version: 1.0 (03/03/2012)
- * @requires jQuery v1.6 or later
  *
  * Copyright 2012 Simon Kusterer - simon@soped.com
  *
