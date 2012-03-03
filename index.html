@@ -6,7 +6,9 @@
 		<script src="source/jquery.dropit.js"></script>
 		<script>
 			$(document).ready(function() {
-				$('.dropable').dropIt();
+				$('.dropable').dropIt({
+					insertPrompt: true
+				});
 			});
 		</script>
 		<style>

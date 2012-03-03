@@ -10,8 +10,8 @@
 (function($) {
 	jQuery.fn.dropIt = function(options) {
 		var that = this;
-		that.options = $.extend({}, options, jQuery.fn.dropIt.defaults);
 
+		that.options = $.extend({}, jQuery.fn.dropIt.defaults, options);
 		var _drop = function(evt) {
 			evt.originalEvent.stopPropagation();
 			evt.originalEvent.preventDefault();
@@ -38,8 +38,12 @@
 		};
 
 		var _preProcess = function(file, evt) {
+			var insertMode = $(evt.srcElement).attr('data-dropit-insert-mode') || that.options.defaultInsertMode;
+			if (that.options.insertPrompt) {
+				insertMode = prompt('Which Insert-Mode do you want to use? (e.g. html, prepend, append)', insertMode);
+			}
 			return {
-				'insertMode': $(evt.srcElement).attr('data-dropit-insert-mode') || that.options.defaultInsertMode
+				'insertMode': insertMode
 			}
 		};
 
@@ -79,12 +83,13 @@
 			reader.readAsDataURL(file);
 		},
 		'unknown': function(file, evt, local) {
-			console.log('unknown');
+			//console.log('dunno what todo');
 		}
 	};
 
 	jQuery.fn.dropIt.defaults = {
 		defaultInsertMode: 'append',
+		insertPrompt: false,
 		tpl: {
 			'image': '<img src="{src}" />'
 		},
