@@ -17,13 +17,13 @@
 			var files = evt.originalEvent.dataTransfer.files;
 
 			for (var i=0; i<files.length; i++) {
-				var file = files[i],
-						type = _getFiletype(file.fileName);
+				var file = files[i];
+				var type = _getFiletype(file.fileName);
 				if (type === false) {
 					continue;
 				}
 
-				var processor = that.options.fileMapper[type] || that.options.defaultProcessor;
+				var processor = that.options.fileTypes[type] || that.options.defaultProcessor;
 				jQuery.fn.dropIt.processors[processor].call(that, file, evt, _preProcess(file, evt));
 			}
 			return false;
@@ -38,8 +38,12 @@
 
 		var _preProcess = function(file, evt) {
 			var insertMode = $(evt.srcElement).attr('data-dropit-insert-mode') || that.options.defaultInsertMode;
+			insertMode = insertMode.toLowerCase();
 			if (that.options.insertPrompt) {
-				insertMode = prompt('Which Insert-Mode do you want to use? (e.g. html, prepend, append)', insertMode);
+				insertMode = prompt('Which Insert-Mode do you want to use? (e.g. overwrite, prepend, append)', insertMode);
+			}
+			if (that.options.insertTypes[insertMode] === undefined) {
+				insertMode = that.options.defaultInsertMode;
 			}
 			return {
 				'insertMode': insertMode
@@ -63,10 +67,11 @@
 
 	jQuery.fn.dropIt.processors = {
 		'html': function(file, evt, local) {
+			var that = this;
 			var reader = new FileReader();
 			reader.onload = (function(theFile) {
 				return function(e) {
-					$(evt.srcElement)[local.insertMode](e.target.result);
+					$(evt.srcElement)[that.options.insertTypes[local.insertMode]](e.target.result);
 				};
 			})(file);
 			reader.readAsText(file);
@@ -87,16 +92,21 @@
 	};
 
 	jQuery.fn.dropIt.defaults = {
-		defaultInsertMode: 'append',
-		insertPrompt: false,
-		tpl: {
+		'insertPrompt': false,
+		'tpl': {
 			'image': '<img src="{src}" />'
 		},
-		fileMapper: {
+		'fileTypes': {
 			'html': 'html',
 			'jpg': 'image',
 			'png': 'image',
 			'gif': 'image'
+		},
+		'defaultInsertMode': 'append',
+		'insertTypes': {
+			'overwrite': 'html',
+			'append': 'append',
+			'prepend': 'prepend'
 		},
 		defaultProcessor: 'unknown'
 	}
