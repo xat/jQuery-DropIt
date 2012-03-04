@@ -66,17 +66,20 @@
 				var c = $('#dropit-testarea');
 				if (local.accept !== false) {
 					if(c.find(local.accept).length === 0) {
+						$('#dropit-testarea').remove();
 						return false;
 					}
 				}
 				if (local.reject !== false) {
 					if(c.find(local.reject).length !== 0) {
+						$('#dropit-testarea').remove();
 						return false;
 					}
 				}
 				$('#dropit-testarea').remove();
 			}
 			$(evt.srcElement)[that.options.insertTypes[local.insertMode]](content);
+			_updateStyles();
 			return true;
 		};
 
@@ -89,9 +92,16 @@
 			return pieces[pieces.length - 1].toLowerCase();
 		};
 
+		var _updateStyles = function() {
+			if (that.options.editMode === true) {
+				$($(that).selector).addClass('dropit-droparea');
+			}
+		};
+
 		return this.each(function () {
 			$(this).bind('dragover', _dragOver);
 			$(this).bind('drop', _drop);
+			_updateStyles();
 		});
 	};
 
@@ -124,6 +134,7 @@
 
 	jQuery.fn.dropIt.defaults = {
 		'namespace':'dropit',
+		'editMode':true,
 		'insertPrompt':false,
 		'tpl':{
 			'image':'<img src="{src}"/>'
