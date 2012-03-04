@@ -30,6 +30,10 @@
 			return false;
 		};
 
+		var _getDataAttribute = function(attr) {
+			return 'data-'+that.options.namespace+'-'+attr;
+		};
+
 		var _dragOver = function (evt) {
 			evt.originalEvent.stopPropagation();
 			evt.originalEvent.preventDefault();
@@ -38,7 +42,7 @@
 		};
 
 		var _preProcess = function (file, evt) {
-			var insertMode = $(evt.srcElement).attr('data-dropit-insert-mode') || that.options.defaultInsertMode;
+			var insertMode = $(evt.srcElement).attr(_getDataAttribute('insert-mode')) || that.options.defaultInsertMode;
 			insertMode = insertMode.toLowerCase();
 			if (that.options.insertPrompt) {
 				insertMode = prompt('Which Insert-Mode do you want to use? (e.g. overwrite, prepend, append)', insertMode);
@@ -98,6 +102,7 @@
 	};
 
 	jQuery.fn.dropIt.defaults = {
+		'namespace':'dropit',
 		'insertPrompt':false,
 		'tpl':{
 			'image':'<img src="{src}" />'
@@ -114,6 +119,8 @@
 			'append':'append',
 			'prepend':'prepend'
 		},
-		'defaultProcessor':'unknown'
+		'defaultProcessor':'unknown',
+		'defaultAccept':false,
+		'defaultReject':false
 	};
 })(jQuery);
