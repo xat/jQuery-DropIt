@@ -30,8 +30,8 @@
 			return false;
 		};
 
-		var _getDataAttribute = function(attrName, el, fallback) {
-			attrName = 'data-'+that.options.namespace+'-'+attrName;
+		var _getDataAttribute = function (attrName, el, fallback) {
+			attrName = 'data-' + that.options.namespace + '-' + attrName;
 			return $(el).attr(attrName) || fallback;
 		};
 
@@ -61,24 +61,25 @@
 		};
 
 		var _postProcess = function (content, evt, local) {
+			$('body').prepend('<div style="display:none;" id="dropit-testarea">' + content + '</div>');
 			if (local.accept !== false || local.reject !== false) {
-				$('body').prepend('<div style="display:none;" id="dropit-testarea">'+content+'</div>');
 				var c = $('#dropit-testarea');
 				if (local.accept !== false) {
-					if(c.find(local.accept).length === 0) {
+					if (c.find(local.accept).length === 0) {
 						$('#dropit-testarea').remove();
 						return false;
 					}
 				}
 				if (local.reject !== false) {
-					if(c.find(local.reject).length !== 0) {
+					if (c.find(local.reject).length !== 0) {
 						$('#dropit-testarea').remove();
 						return false;
 					}
 				}
-				$('#dropit-testarea').remove();
 			}
-			$(evt.srcElement)[that.options.insertTypes[local.insertMode]](content);
+			$('#dropit-testarea').children().addClass('dropit-item');
+			$(evt.srcElement)[that.options.insertTypes[local.insertMode]]($('#dropit-testarea').html());
+			$('#dropit-testarea').remove();
 			_updateStyles();
 			return true;
 		};
@@ -92,11 +93,18 @@
 			return pieces[pieces.length - 1].toLowerCase();
 		};
 
-		var _updateStyles = function() {
-			if (that.options.editMode === true) {
+		var _updateStyles = function () {
+			if (that.options.displayMeta === true) {
 				$($(that).selector).addClass('dropit-droparea');
 			}
 		};
+
+		if (that.options.itemsRemoveable) {
+			$('.dropit-item').live('dblclick', function (evt) {
+				$(this).remove();
+				return false;
+			});
+		}
 
 		return this.each(function () {
 			$(this).bind('dragover', _dragOver);
@@ -134,7 +142,8 @@
 
 	jQuery.fn.dropIt.defaults = {
 		'namespace':'dropit',
-		'editMode':true,
+		'displayMeta':true,
+		'itemsRemoveable':true,
 		'insertPrompt':false,
 		'tpl':{
 			'image':'<img src="{src}"/>'
