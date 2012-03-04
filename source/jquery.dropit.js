@@ -43,6 +43,8 @@
 		};
 
 		var _preProcess = function (file, evt) {
+			var accept = _getDataAttribute('accept', evt.srcElement, that.options.defaultAccept);
+			var reject = _getDataAttribute('reject', evt.srcElement, that.options.defaultReject);
 			var insertMode = _getDataAttribute('insert-mode', evt.srcElement, that.options.defaultInsertMode);
 			insertMode = insertMode.toLowerCase();
 			if (that.options.insertPrompt) {
@@ -52,12 +54,30 @@
 				insertMode = that.options.defaultInsertMode;
 			}
 			return {
-				'insertMode':insertMode
+				'insertMode':insertMode,
+				'accept':accept,
+				'reject':reject
 			}
 		};
 
 		var _postProcess = function (content, evt, local) {
+			if (local.accept !== false || local.reject !== false) {
+				$('body').prepend('<div style="display:none;" id="dropit-testarea">'+content+'</div>');
+				var c = $('#dropit-testarea');
+				if (local.accept !== false) {
+					if(c.find(local.accept).length === 0) {
+						return false;
+					}
+				}
+				if (local.reject !== false) {
+					if(c.find(local.reject).length !== 0) {
+						return false;
+					}
+				}
+				$('#dropit-testarea').remove();
+			}
 			$(evt.srcElement)[that.options.insertTypes[local.insertMode]](content);
+			return true;
 		};
 
 		var _getFiletype = function (fileName) {
@@ -106,7 +126,7 @@
 		'namespace':'dropit',
 		'insertPrompt':false,
 		'tpl':{
-			'image':'<img src="{src}" />'
+			'image':'<img src="{src}"/>'
 		},
 		'fileTypes':{
 			'html':'html',
