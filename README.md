@@ -32,12 +32,12 @@ to be the default insert-mode initialize the plugin with _{defaultInsertMode: 'o
 Valid insert modes are: append, prepend and overwrite.
 
 Okay, atm you can just drop any snippet into the dropzone areas. But there are situations
-you want to limitate whats allowed to get dropped. For example you have an unorderd list
-where you want to allow _li_ elements to get dropped in. This is how you handle it:
+you want to limitate whats allowed to get dropped. For example if you have an unorderd list
+where you only want to allow _li_ elements to get dropped in. This is how you handle it:
 
     <ul class="dropzone" data-dropit-accept=">li"></ul>
 
-Every snippet dropped into this dropzone will now get matched against the ">li" selector. If they dont match
+Every snippet dropped into this dropzone will now get matched against the _>li_ selector. If they dont match
 they will get rejected. This also works the other way around:
 
     <ul class="dropzone" data-dropit-reject=">li"></ul>
