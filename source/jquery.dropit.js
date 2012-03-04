@@ -30,8 +30,9 @@
 			return false;
 		};
 
-		var _getDataAttribute = function(attr) {
-			return 'data-'+that.options.namespace+'-'+attr;
+		var _getDataAttribute = function(attrName, el, fallback) {
+			attrName = 'data-'+that.options.namespace+'-'+attrName;
+			return $(el).attr(attrName) || fallback;
 		};
 
 		var _dragOver = function (evt) {
@@ -42,7 +43,7 @@
 		};
 
 		var _preProcess = function (file, evt) {
-			var insertMode = $(evt.srcElement).attr(_getDataAttribute('insert-mode')) || that.options.defaultInsertMode;
+			var insertMode = _getDataAttribute('insert-mode', evt.srcElement, that.options.defaultInsertMode);
 			insertMode = insertMode.toLowerCase();
 			if (that.options.insertPrompt) {
 				insertMode = prompt('Which Insert-Mode do you want to use? (e.g. overwrite, prepend, append)', insertMode);
