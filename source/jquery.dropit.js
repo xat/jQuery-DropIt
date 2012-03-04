@@ -93,9 +93,7 @@
 		};
 
 		var _updateStyles = function () {
-			if (that.options.displayMeta === true) {
-				$($(that).selector).addClass('dropit-droparea');
-			}
+			$($(that).selector).addClass('dropit-droparea');
 		};
 
 		if (that.options.itemsRemoveable) {
@@ -141,7 +139,6 @@
 
 	jQuery.fn.dropIt.defaults = {
 		'namespace':'dropit',
-		'displayMeta':true,
 		'itemsRemoveable':true,
 		'insertPrompt':false,
 		'tpl':{
