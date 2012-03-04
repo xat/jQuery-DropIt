@@ -4,6 +4,10 @@ DropIt is a jQuery plugin which lets you drop html and image files in
 your browser and let them render inside of html elements.
 It uses the HTML5 File API and currently works with the latest chrome and firefox versions.
 
+## Demo
+
+See _DropIt_ in action [here](http://xat.github.com/jQuery-DropIt/).
+
 ## Usage
 
     // JS
