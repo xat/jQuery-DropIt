@@ -13,10 +13,9 @@
 			evt.originalEvent.stopPropagation();
 			evt.originalEvent.preventDefault();
 			var files = evt.originalEvent.dataTransfer.files;
-
 			for (var i = 0; i < files.length; i++) {
 				var file = files[i];
-				var type = _getFiletype(file.fileName);
+				var type = _getFiletype(file.name);
 				if (type === false) {
 					continue;
 				}
@@ -43,12 +42,12 @@
 		};
 
 		var _preProcess = function (file, evt) {
-			var accept = _getDataAttribute('accept', evt.srcElement, that.options.defaultAccept);
-			var reject = _getDataAttribute('reject', evt.srcElement, that.options.defaultReject);
-			var insertMode = _getDataAttribute('insert-mode', evt.srcElement, that.options.defaultInsertMode);
+			var accept = _getDataAttribute('accept', evt.target, that.options.defaultAccept);
+			var reject = _getDataAttribute('reject', evt.target, that.options.defaultReject);
+			var insertMode = _getDataAttribute('insert-mode', evt.target, that.options.defaultInsertMode);
 			insertMode = insertMode.toLowerCase();
 			if (that.options.insertPrompt) {
-				insertMode = prompt('Which Insert-Mode do you want to use? (e.g. overwrite, prepend, append)', insertMode);
+				insertMode = prompt('Which Insert-Mode do you want to use? (e.g.: overwrite, prepend, append)', insertMode);
 			}
 			if (that.options.insertTypes[insertMode] === undefined) {
 				insertMode = that.options.defaultInsertMode;
@@ -78,7 +77,7 @@
 				}
 			}
 			$('#dropit-testarea').children().addClass('dropit-item');
-			$(evt.srcElement)[that.options.insertTypes[local.insertMode]]($('#dropit-testarea').html());
+			$(evt.target)[that.options.insertTypes[local.insertMode]]($('#dropit-testarea').html());
 			$('#dropit-testarea').remove();
 			_updateStyles();
 			return true;
@@ -117,7 +116,7 @@
 		'html':function (file, evt, local, fn) {
 			var that = this;
 			var reader = new FileReader();
-			reader.onload = (function (theFile) {
+			reader.onload = (function (f) {
 				return function (e) {
 					fn.call(that, e.target.result);
 				};
